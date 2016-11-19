@@ -37,6 +37,29 @@ class Contacts extends React.Component{
 		this.setState(newState);
 	}
 
+	_onSelect(key){
+		if(key == this.state.selectedKey){
+			console.log("key select cancled");
+			this.setState({
+				selectedKey: -1
+			});
+			return;
+		}
+
+		this.setState({
+			selectedKey: key
+		});
+		console.log(key+"is selected");
+	}
+
+	_isSelected(key){
+		if(this.state.selectedKey == key){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
 	render(){
 		return(
 				<div>
@@ -46,7 +69,10 @@ class Contacts extends React.Component{
 								return (<ContactInfo  name={contact.name}
 													  phone={contact.phone}
 													  key = {i}
-										/>);
+													  contactKey = {i}
+													  isSelected={this._isSelected.bind(this)(i)}
+                                         			  onSelect={this._onSelect.bind(this)
+                                        }/>);
 
 							}
 						)}
@@ -63,8 +89,22 @@ class ContactInfo extends React.Component{
 	}
 
 	render(){
+		let getStyle = isSelect => {
+			if(!isSelect) return;
+
+			let style = {
+				fontWeight: "bold",
+				backgroundColor: "#4efcd8"
+			};
+
+			return style;
+		};
+
 		return(
-				<li>{this.props.name}{this.props.phone}</li>
+				<li style={getStyle(this.props.isSelected)} 
+					onClick={this.handleClick.bind(this)}>
+					{this.props.name}{this.props.phone}
+				</li>
 			);
 	}
 }
